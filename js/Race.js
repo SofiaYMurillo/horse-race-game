@@ -1,50 +1,76 @@
-import { Deck } from './Deck.js';
+import { Deck } from "./Deck.js";
 
 export class Race {
 
-    constructor(distance) {
-        this.distance = distance;
-        this.horses = [];
-        this.winner = null;
+    constructor() {
         this.deck = new Deck();
-        this.interval = null;
+        this.positions = {
+            oros: 0,
+            copas: 0,
+            bastos: 0,
+            espadas: 0
+        };
+        this.finishLine = 5;
+        this.raceStarted = false;
+
+        this.init();
     }
 
-    addHorse(horse) {
-        this.horses.push(horse);
+    init() {
+        document.getElementById("start")
+            .addEventListener("click", () => this.startRace());
+
+        document.getElementById("draw")
+            .addEventListener("click", () => this.drawCard());
+
+        this.renderRace();
     }
 
-    start() {
+    startRace() {
+        this.positions = { oros: 0, copas: 0, bastos: 0, espadas: 0 };
+        this.raceStarted = true;
+        document.getElementById("draw").disabled = false;
+        this.renderRace();
+    }
 
-        this.interval = setInterval(() => {
+    drawCard() {
+        if (!this.raceStarted) return;
 
-            if (!this.winner) {
+        const card = this.deck.drawCard();
 
-                // Sacar carta
-                const card = this.deck.drawCard();
-               document.getElementById("card").innerHTML =
-    `<img src="assets/${card}.png" width="80">`;
+        // Mostrar imagen
+        document.getElementById("card").innerHTML =
+            `<img src="./assets/${card}.png" width="100">`;
 
-                // Buscar caballo correspondiente
-                const horse = this.horses.find(h => h.suit === card);
+        // Avanzar caballo correspondiente
+        this.positions[card]++;
 
-                if (horse) {
-                    horse.move();
-                    horse.element.style.left = horse.position + "px";
+        this.renderRace();
+        this.checkWinner();
+    }
 
-                    // Verificar si ganó
-                    if (horse.position >= this.distance) {
-                        horse.position = this.distance;
-                        this.winner = horse;
-                        clearInterval(this.interval);
-                        document.getElementById("winner").innerText =
-                            `🏆 Ganador: ${horse.suit}`;
-                    }
-                }
+    renderRace() {
+        const raceDiv = document.getElementById("race");
+        raceDiv.innerHTML = "";
+
+        for (let suit in this.positions) {
+            const horse = document.createElement("div");
+            horse.innerText =
+                suit.toUpperCase() +
+                " 🐎 " +
+                "—".repeat(this.positions[suit]);
+
+            raceDiv.appendChild(horse);
+        }
+    }
+
+    checkWinner() {
+        for (let suit in this.positions) {
+            if (this.positions[suit] >= this.finishLine) {
+                alert("¡Ganó " + suit.toUpperCase() + "!");
+                this.raceStarted = false;
+                document.getElementById("draw").disabled = true;
             }
-
-        }, 800);
-
+        }
     }
-
 }
