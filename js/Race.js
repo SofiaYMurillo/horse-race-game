@@ -38,13 +38,10 @@ export class Race {
 
         const card = this.deck.drawCard();
 
-        // Mostrar imagen
         document.getElementById("card").innerHTML =
             `<img src="./assets/${card}.png" width="100">`;
 
-        // Avanzar caballo correspondiente
         this.positions[card]++;
-
         this.renderRace();
         this.checkWinner();
     }
