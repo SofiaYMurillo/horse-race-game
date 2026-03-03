@@ -1,21 +1,23 @@
 import { Race } from './Race.js';
+import { Horse } from './Horse.js';
 
-const race = new Race(800);
-
-race.addHorse("Caballo 1");
-race.addHorse("Caballo 2");
-race.addHorse("Caballo 3");
+const race = new Race(600);
+const suits = ["♥", "♠", "♦", "♣"];
 
 const track = document.getElementById("track");
 
-race.horses.forEach((horse, index) => {
+// Crear caballos
+suits.forEach(suit => {
+
+    const horse = new Horse(suit);
+    race.addHorse(horse);
 
     const lane = document.createElement("div");
     lane.classList.add("lane");
 
     const horseElement = document.createElement("div");
     horseElement.classList.add("horse");
-    horseElement.innerText = "🐎";
+    horseElement.innerText = suit + " 🐎";
 
     lane.appendChild(horseElement);
     track.appendChild(lane);
@@ -23,6 +25,7 @@ race.horses.forEach((horse, index) => {
     horse.element = horseElement;
 });
 
+// Botón iniciar
 document.getElementById("startBtn").addEventListener("click", () => {
     race.start();
 });

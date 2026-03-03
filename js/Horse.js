@@ -1,14 +1,13 @@
 export class Horse {
 
-    constructor(name) {
-        this.name = name;
-        this.position = 0;
-        this.element = null;
+    constructor(suit) {
+        this.suit = suit;       // ♥ ♠ ♦ ♣
+        this.position = 0;      // posición inicial
+        this.element = null;    // referencia visual
     }
 
     move() {
-        let step = Math.floor(Math.random() * 10); // operador aleatorio
-        this.position += step;
+        this.position += 20;    // avanza 20px cada vez que sale su carta
     }
 
 }

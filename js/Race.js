@@ -1,4 +1,4 @@
-import { Horse } from './Horse.js';
+import { Deck } from './Deck.js';
 
 export class Race {
 
@@ -6,11 +6,11 @@ export class Race {
         this.distance = distance;
         this.horses = [];
         this.winner = null;
+        this.deck = new Deck();
         this.interval = null;
     }
 
-    addHorse(name) {
-        const horse = new Horse(name);
+    addHorse(horse) {
         this.horses.push(horse);
     }
 
@@ -18,26 +18,32 @@ export class Race {
 
         this.interval = setInterval(() => {
 
-            this.horses.forEach(horse => {
+            if (!this.winner) {
 
-                if (!this.winner) {
+                // Sacar carta
+                const card = this.deck.drawCard();
+               document.getElementById("card").innerHTML =
+    `<img src="assets/${card}.png" width="80">`;
 
+                // Buscar caballo correspondiente
+                const horse = this.horses.find(h => h.suit === card);
+
+                if (horse) {
                     horse.move();
+                    horse.element.style.left = horse.position + "px";
 
+                    // Verificar si ganó
                     if (horse.position >= this.distance) {
-                        horse.position = this.distance; // restricción
+                        horse.position = this.distance;
                         this.winner = horse;
                         clearInterval(this.interval);
                         document.getElementById("winner").innerText =
-                            `🏆 Ganador: ${horse.name}`;
+                            `🏆 Ganador: ${horse.suit}`;
                     }
-
-                    horse.element.style.left = horse.position + "px";
                 }
+            }
 
-            });
-
-        }, 200);
+        }, 800);
 
     }
 
