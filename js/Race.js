@@ -4,14 +4,17 @@ export class Race {
 
     constructor() {
         this.deck = new Deck();
+        this.finishLine = 600; // distancia en px
+        this.raceStarted = false;
+
+        this.suits = ["oros", "copas", "bastos", "espadas"];
+
         this.positions = {
             oros: 0,
             copas: 0,
             bastos: 0,
             espadas: 0
         };
-        this.finishLine = 5;
-        this.raceStarted = false;
 
         this.init();
     }
@@ -27,9 +30,18 @@ export class Race {
     }
 
     startRace() {
-        this.positions = { oros: 0, copas: 0, bastos: 0, espadas: 0 };
+        this.positions = {
+            oros: 0,
+            copas: 0,
+            bastos: 0,
+            espadas: 0
+        };
+
         this.raceStarted = true;
         document.getElementById("draw").disabled = false;
+        document.getElementById("winner").innerText = "";
+        document.getElementById("card").innerHTML = "";
+
         this.renderRace();
     }
 
@@ -38,36 +50,47 @@ export class Race {
 
         const card = this.deck.drawCard();
 
+        // Mostrar carta
         document.getElementById("card").innerHTML =
             `<img src="./assets/${card}.png" width="100">`;
 
-        this.positions[card]++;
-        this.renderRace();
-        this.checkWinner();
+        // Avanzar caballo
+        this.positions[card] += 60;
+
+        this.updateHorsePosition(card);
+        this.checkWinner(card);
     }
 
     renderRace() {
-        const raceDiv = document.getElementById("race");
-        raceDiv.innerHTML = "";
+        const track = document.getElementById("track");
+        track.innerHTML = "";
 
-        for (let suit in this.positions) {
-            const horse = document.createElement("div");
-            horse.innerText =
-                suit.toUpperCase() +
-                " 🐎 " +
-                "—".repeat(this.positions[suit]);
+        this.suits.forEach(suit => {
+            const lane = document.createElement("div");
+            lane.classList.add("lane");
 
-            raceDiv.appendChild(horse);
-        }
+            const horse = document.createElement("img");
+            horse.src = `./assets/${suit}.png`;
+            horse.classList.add("horse");
+            horse.id = suit;
+            horse.style.left = "0px";
+
+            lane.appendChild(horse);
+            track.appendChild(lane);
+        });
     }
 
-    checkWinner() {
-        for (let suit in this.positions) {
-            if (this.positions[suit] >= this.finishLine) {
-                alert("¡Ganó " + suit.toUpperCase() + "!");
-                this.raceStarted = false;
-                document.getElementById("draw").disabled = true;
-            }
+    updateHorsePosition(suit) {
+        const horse = document.getElementById(suit);
+        horse.style.left = this.positions[suit] + "px";
+    }
+
+    checkWinner(suit) {
+        if (this.positions[suit] >= this.finishLine) {
+            document.getElementById("winner").innerText =
+                "🏆 ¡Ganó " + suit.toUpperCase() + "!";
+            this.raceStarted = false;
+            document.getElementById("draw").disabled = true;
         }
     }
 }

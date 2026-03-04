@@ -11,16 +11,12 @@
 
     <h1>🐎 Carrera de Caballos 🃏</h1>
 
-    <!-- Botón -->
-    
+    <!-- Botones -->
     <button id="start">Iniciar carrera</button>
     <button id="draw" disabled>Sacar carta</button>
 
-    <div id="card"></div>
-    <div id="race"></div>
-
     <!-- Carta actual -->
-    <h2 id="card">Carta: </h2>
+    <div id="card"></div>
 
     <!-- Pista -->
     <div id="track"></div>
@@ -28,8 +24,11 @@
     <!-- Ganador -->
     <h2 id="winner"></h2>
 
-    <!-- Script principal -->
-    <script type="module" src="js/main.js"></script>
+    <!-- Solo un script -->
+    <script type="module">
+        import { Race } from "./js/Race.js";
+        new Race();
+    </script>
 
 </body>
 
