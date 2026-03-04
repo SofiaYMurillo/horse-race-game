@@ -4,7 +4,7 @@ export class Race {
 
     constructor() {
         this.deck = new Deck();
-        this.finishLine = 600; // distancia en px
+        this.finishLine = 600; // meta en pixeles
         this.raceStarted = false;
 
         this.suits = ["oros", "copas", "bastos", "espadas"];
@@ -50,14 +50,16 @@ export class Race {
 
         const card = this.deck.drawCard();
 
+        if (!card) return; // evita error si el mazo se vacía
+
         // Mostrar carta
         document.getElementById("card").innerHTML =
             `<img src="./assets/${card}.png" width="100">`;
 
         // Avanzar caballo
-        this.positions[card] += 60;
+        this.positions[card] += 80;
 
-        this.updateHorsePosition(card);
+        this.updateHorse(card);
         this.checkWinner(card);
     }
 
@@ -69,10 +71,10 @@ export class Race {
             const lane = document.createElement("div");
             lane.classList.add("lane");
 
-            const horse = document.createElement("img");
-            horse.src = `./assets/${suit}.png`;
+            const horse = document.createElement("div");
             horse.classList.add("horse");
             horse.id = suit;
+            horse.innerText = "🐎";
             horse.style.left = "0px";
 
             lane.appendChild(horse);
@@ -80,7 +82,7 @@ export class Race {
         });
     }
 
-    updateHorsePosition(suit) {
+    updateHorse(suit) {
         const horse = document.getElementById(suit);
         horse.style.left = this.positions[suit] + "px";
     }
