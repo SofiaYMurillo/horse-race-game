@@ -8,9 +8,9 @@ export class Deck {
     resetDeck() {
         this.cards = [];
 
-        // 12 cartas por palo (baraja española)
+        // 80 cartas por palo (baraja española)
         for (let suit of this.suits) {
-            for (let i = 1; i <= 50; i++) {
+            for (let i = 1; i <= 80; i++) {
                 this.cards.push(suit);
             }
         }

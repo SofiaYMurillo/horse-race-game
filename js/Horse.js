@@ -7,7 +7,7 @@ export class Horse {
     }
 
     move() {
-        this.position += 20;    // avanza 20px cada vez que sale su carta
+        this.position += 30;    // avanza 20px cada vez que sale su carta
     }
 
 }
