@@ -10,7 +10,7 @@ export class Deck {
 
         // 12 cartas por palo (baraja española)
         for (let suit of this.suits) {
-            for (let i = 1; i <= 12; i++) {
+            for (let i = 1; i <= 50; i++) {
                 this.cards.push(suit);
             }
         }
