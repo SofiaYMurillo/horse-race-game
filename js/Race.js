@@ -4,7 +4,7 @@ export class Race {
 
     constructor() {
         this.deck = new Deck();
-        this.finishLine = 600; // meta en pixeles
+        this.finishLine = 900;
         this.raceStarted = false;
 
         this.suits = ["oros", "copas", "bastos", "espadas"];
@@ -30,12 +30,16 @@ export class Race {
     }
 
     startRace() {
+
         this.positions = {
             oros: 0,
             copas: 0,
             bastos: 0,
             espadas: 0
         };
+
+        const track = document.getElementById("track");
+        this.finishLine = track.clientWidth - 50;
 
         this.raceStarted = true;
         document.getElementById("draw").disabled = false;
@@ -49,15 +53,12 @@ export class Race {
         if (!this.raceStarted) return;
 
         const card = this.deck.drawCard();
+        if (!card) return;
 
-        if (!card) return; // evita error si el mazo se vacía
-
-        // Mostrar carta
         document.getElementById("card").innerHTML =
             `<img src="./assets/${card}.png" width="100">`;
 
-        // Avanzar caballo
-        this.positions[card] += 80;
+        this.positions[card] += 40;
 
         this.updateHorse(card);
         this.checkWinner(card);
